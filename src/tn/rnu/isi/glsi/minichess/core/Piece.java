@@ -18,6 +18,7 @@ public class Piece extends JLabel implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
         //TODO show possible destination
     }
 
