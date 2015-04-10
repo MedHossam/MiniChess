@@ -38,20 +38,20 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
     //intialize variables
     private Image boardImage1;
     private Image boardImage2;
-    
+
     //intialize components
     private JPanel chessBoard = new JPanel();
-    
+
     private JPanel northPanel = new JPanel();
     private JPanel southPanel = new JPanel();
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
-    
+
     JLayeredPane layeredPane;
-    JLabel chessPiece;
+    Piece piece;
     int xAdjustment;
     int yAdjustment;
-    
+
     //initialze arrays to hold squares and images of the board
     private Piece[] pieces = new Piece[40];
     private Square[] squares = new Square[40];
@@ -100,7 +100,7 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         addLabelsToHeadAndFooterPanels(southPanel);
         addLabelsToSidePanels(westPanel);
         addLabelsToSidePanels(eastPanel);
-        
+
         northPanel.setBackground(Color.white);
         southPanel.setBackground(Color.white);
         westPanel.setBackground(Color.white);
@@ -115,26 +115,22 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         //call method to add squares and pieces to the center panel which holds the board
         addPanelsAndLabels();
     }
-    
-    private void addLabelsToHeadAndFooterPanels(JPanel panel) {
-        GridLayout gridLayout = new GridLayout(0, 5);
 
-        panel.setLayout(gridLayout);
+    private void addLabelsToHeadAndFooterPanels(JPanel panel) {
+        panel.setLayout(new GridLayout(0, 5));
         JLabel[] lbls = new JLabel[5];
         String[] label = {"A", "B", "C", "D", "E"};
 
         for (int i = 0; i < 5; i++) {
             lbls[i] = new JLabel(label[i], SwingConstants.CENTER);
             lbls[i].setSize(20, 4);
-            
+
             panel.add(lbls[i]);
         }
     }
 
     private void addLabelsToSidePanels(JPanel panel) {
-        GridLayout gridLayout = new GridLayout(8, 0);
-
-        panel.setLayout(gridLayout);
+        panel.setLayout(new GridLayout(8, 0));
         JLabel[] lbls = new JLabel[8];
         int[] num = {8, 7, 6, 5, 4, 3, 2, 1};
         for (int i = 0; i < 8; i++) {
@@ -148,7 +144,7 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         addPanelsAndImages();
 
         for (int i = 0; i < squares.length; i++) {
-            pieces[i] = new Piece();
+            pieces[i] = new Piece(Piece.EPi, Piece.EPi);
 
             //used to know the postion of the label on the board
             pieces[i].setName(squares[i].getName());
@@ -180,9 +176,9 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
             }
         }
     }
-    
+
     public void mousePressed(MouseEvent e) {
-        chessPiece = null;
+        piece = null;
         Component c = chessBoard.findComponentAt(e.getX(), e.getY());
 
         if (c instanceof JPanel) {
@@ -192,59 +188,62 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         Point parentLocation = c.getParent().getLocation();
         xAdjustment = parentLocation.x - e.getX();
         yAdjustment = parentLocation.y - e.getY();
-        chessPiece = (JLabel) c;
-        chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-        chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
-        layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+        piece = (Piece) c;
+        piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+        piece.setSize(piece.getWidth(), piece.getHeight());
+        layeredPane.add(piece, JLayeredPane.DRAG_LAYER);
     }
 
     //Move the chess piece around
     public void mouseDragged(MouseEvent me) {
-        if (chessPiece == null) {
+        if (piece == null) {
             return;
         }
-        chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+        piece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
     }
 
     //Drop the chess piece back onto the chess board
     public void mouseReleased(MouseEvent e) {
-        if (chessPiece == null) {
+        if (piece == null) {
             return;
         }
 
-        chessPiece.setVisible(false);
+        piece.setVisible(false);
         Component c = chessBoard.findComponentAt(e.getX(), e.getY());
 
         if (c instanceof JLabel) {
             Container parent = c.getParent();
             parent.remove(0);
-            parent.add(chessPiece);
+            parent.add(piece);
         } else {
             Container parent = (Container) c;
-            parent.add(chessPiece);
+            parent.add(piece);
         }
 
-        chessPiece.setVisible(true);
+        piece.setVisible(true);
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+    }
 
     @Override
-    public void mouseMoved(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
     //method sets image of a label at a certain position in the board according to the block name i.e D4
-    public void addPiece(ImageIcon img, String block) {
-        for (int s = 0; s < pieces.length; s++) {
-            if (pieces[s].getName().equalsIgnoreCase(block)) {
-                pieces[s].setIcon(img);
+    public void addPiece(Piece piece) {
+        for (Piece p : pieces) {
+            if (p.getName().equalsIgnoreCase(piece.getPosition())) {
+                p.setIcon(piece.getImgIcon());
             }
         }
     }

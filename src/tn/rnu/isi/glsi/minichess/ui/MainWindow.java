@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import tn.rnu.isi.glsi.minichess.core.Piece;
 
 /**
  *
@@ -36,15 +37,13 @@ public class MainWindow {
         whiteBlock = toolkit.getImage(urlB);
 
         Board board = new Board(whiteBlock, blackBlock);
-
-        // TODO adding pieces to board
+        
         addPiecesToBoard(board);
     }
 
     private static void addPiecesToBoard(Board board) {
-        URL urlCN = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/CN.png");
-        ImageIcon iconCN = urlCN != null ? new ImageIcon((URL) urlCN) : new ImageIcon("null");
-        board.addPiece(iconCN, "A8");
+        board.addPiece(new Piece(Piece.BKn, "A8"));
+        board.addPiece(new Piece(Piece.BKi, "D5"));
     }
 
     /**
