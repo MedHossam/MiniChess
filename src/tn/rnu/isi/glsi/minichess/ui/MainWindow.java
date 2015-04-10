@@ -37,13 +37,6 @@ public class MainWindow {
         whiteBlock = toolkit.getImage(urlB);
 
         Board board = new Board(whiteBlock, blackBlock);
-        
-        addPiecesToBoard(board);
-    }
-
-    private static void addPiecesToBoard(Board board) {
-        board.addPiece(new Piece(Piece.BKn, "A8"));
-        board.addPiece(new Piece(Piece.BKi, "D5"));
     }
 
     /**

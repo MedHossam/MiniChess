@@ -144,7 +144,7 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         addPanelsAndImages();
 
         for (int i = 0; i < squares.length; i++) {
-            pieces[i] = new Piece(Piece.EPi, Piece.EPi);
+            pieces[i] = new Piece(Piece.INITIALPOSITIONS[i], Piece.POSITIONS[i]);
 
             //used to know the postion of the label on the board
             pieces[i].setName(squares[i].getName());
@@ -153,6 +153,10 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
             //adds squares created in addPanelsAndImages()
             chessBoard.add(squares[i]);
+        }
+
+        for (int i = 0; i < squares.length; i++) {
+            addPiece(pieces[i]);
         }
     }
 
