@@ -21,29 +21,30 @@ public class MainWindow {
     }
 
     private static void initBoard() {
-            Image blackBlock;
-            Image whiteBlock;
-            
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-            URL urlN = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/blackBlock.jpg");
-            URL urlB = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/whiteBlock.jpg");
-            
-            ImageIcon iconN = urlN != null ? new ImageIcon((URL) urlN) : new ImageIcon("null");
-            ImageIcon iconB = urlB != null ? new ImageIcon((URL) urlB) : new ImageIcon("null");
-            
-            blackBlock = toolkit.getImage(urlN);
-            whiteBlock = toolkit.getImage(urlB);
-            
-            Board board = new Board(whiteBlock, blackBlock);
-            
-            // TODO adding pieces to board
-            addPiecesToBoard(board);
+        System.out.println("======== initBoard() ======= ");
+        Image blackBlock;
+        Image whiteBlock;
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        URL urlN = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/blackBlock.jpg");
+        URL urlB = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/whiteBlock.jpg");
+
+        ImageIcon iconN = urlN != null ? new ImageIcon((URL) urlN) : new ImageIcon("null");
+        ImageIcon iconB = urlB != null ? new ImageIcon((URL) urlB) : new ImageIcon("null");
+
+        blackBlock = toolkit.getImage(urlN);
+        whiteBlock = toolkit.getImage(urlB);
+
+        Board board = new Board(whiteBlock, blackBlock);
+
+        // TODO adding pieces to board
+        addPiecesToBoard(board);
     }
-    
+
     private static void addPiecesToBoard(Board board) {
         URL urlCN = MainWindow.class.getResource("/tn/rnu/isi/glsi/minichess/imgs/CN.png");
-            ImageIcon iconCN = urlCN != null ? new ImageIcon((URL) urlCN) : new ImageIcon("null");
-            board.addPiece(iconCN, "A1");
+        ImageIcon iconCN = urlCN != null ? new ImageIcon((URL) urlCN) : new ImageIcon("null");
+        board.addPiece(iconCN, "A8");
     }
 
     /**
