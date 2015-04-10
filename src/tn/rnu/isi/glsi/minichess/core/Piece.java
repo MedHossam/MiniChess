@@ -47,16 +47,16 @@ public class Piece extends JLabel {
 
     // Initial Positions
     public static final String[] INITIALPOSITIONS = {
-        BKn, BBi, BKi, BQu, BTo,
+        BKn, BBi, BQu, BKi, BTo,
         BPa, BPa, BPa, BPa, BPa,
         EPi, EPi, EPi, EPi, EPi,
         EPi, EPi, EPi, EPi, EPi,
         EPi, EPi, EPi, EPi, EPi,
         EPi, EPi, EPi, EPi, EPi,
         WPa, WPa, WPa, WPa, WPa,
-        WKn, WBi, WKi, WQu, WTo,};
+        WKn, WBi, WQu, WKi, WTo,};
 
-    // Initial Positions
+    // Positions Names
     public static final String[] POSITIONS = {
         "A8", "B8", "C8", "D8", "E8",
         "A7", "B7", "C7", "D7", "E7",

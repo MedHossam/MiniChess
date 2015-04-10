@@ -159,6 +159,15 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
             addPiece(pieces[i]);
         }
     }
+    
+    //method sets image of a label at a certain position in the board according to the block name i.e D4
+    public void addPiece(Piece piece) {
+        for (Piece p : pieces) {
+            if (p.getName().equalsIgnoreCase(piece.getPosition())) {
+                p.setIcon(piece.getImgIcon());
+            }
+        }
+    }
 
     //this method will create squares with backround images of chess board and set its name according to 1-8 for rows and A-H for coloumns
     private void addPanelsAndImages() {
@@ -241,14 +250,5 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseExited(MouseEvent e) {
-    }
-
-    //method sets image of a label at a certain position in the board according to the block name i.e D4
-    public void addPiece(Piece piece) {
-        for (Piece p : pieces) {
-            if (p.getName().equalsIgnoreCase(piece.getPosition())) {
-                p.setIcon(piece.getImgIcon());
-            }
-        }
     }
 }
