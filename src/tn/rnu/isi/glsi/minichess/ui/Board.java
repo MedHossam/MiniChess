@@ -18,7 +18,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
@@ -49,8 +48,6 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
     JLayeredPane layeredPane;
     Piece piece;
-    int xAdjustment;
-    int yAdjustment;
 
     //initialze arrays to hold squares and images of the board
     private Piece[] pieces = new Piece[40];
@@ -199,11 +196,14 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         }
 
         Point parentLocation = c.getParent().getLocation();
-        xAdjustment = parentLocation.x - e.getX();
-        yAdjustment = parentLocation.y - e.getY();
         piece = (Piece) c;
-        piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+        
+        piece.setxAdjustment(parentLocation.x - e.getX());
+        piece.setyAdjustment(parentLocation.y - e.getY());
+        
+        piece.setLocation(e.getX() + piece.getxAdjustment(), e.getY() + piece.getyAdjustment());
         piece.setSize(piece.getWidth(), piece.getHeight());
+        
         layeredPane.add(piece, JLayeredPane.DRAG_LAYER);
     }
 
@@ -212,7 +212,7 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         if (piece == null) {
             return;
         }
-        piece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+        piece.setLocation(me.getX() + piece.getxAdjustment(), me.getY() + piece.getyAdjustment());
     }
 
     //Drop the chess piece back onto the chess board
