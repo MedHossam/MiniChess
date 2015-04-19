@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -47,7 +48,7 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
     private JPanel westPanel = new JPanel();
 
     JLayeredPane layeredPane;
-    Piece piece;
+    Piece pieceSelected;
 
     //initialze arrays to hold squares and images of the board
     private Piece[] pieces = new Piece[40];
@@ -152,11 +153,12 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
             chessBoard.add(squares[i]);
         }
 
+        // Add pieces to initial positions
         for (int i = 0; i < squares.length; i++) {
             addPiece(pieces[i]);
         }
     }
-    
+
     //method sets image of a label at a certain position in the board according to the block name i.e D4
     public void addPiece(Piece piece) {
         for (Piece p : pieces) {
@@ -188,7 +190,9 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
     }
 
     public void mousePressed(MouseEvent e) {
-        piece = null;
+        //setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        pieceSelected = null;
         Component c = chessBoard.findComponentAt(e.getX(), e.getY());
 
         if (c instanceof JPanel) {
@@ -196,44 +200,93 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         }
 
         Point parentLocation = c.getParent().getLocation();
-        piece = (Piece) c;
-        
-        piece.setxAdjustment(parentLocation.x - e.getX());
-        piece.setyAdjustment(parentLocation.y - e.getY());
-        
-        piece.setLocation(e.getX() + piece.getxAdjustment(), e.getY() + piece.getyAdjustment());
-        piece.setSize(piece.getWidth(), piece.getHeight());
-        
-        layeredPane.add(piece, JLayeredPane.DRAG_LAYER);
+        pieceSelected = (Piece) c;
+
+        pieceSelected.setxAdjustment(parentLocation.x - e.getX() - 1);
+        pieceSelected.setyAdjustment(parentLocation.y - e.getY() + 3);
+
+        // TODO Show possible positions : this method will be in class blow
+        if (pieceSelected.getType().contains("W")) { // White pieces
+            switch (pieceSelected.getType()) {
+                case "WPa":
+                    char newRowPosition = pieceSelected.getName().charAt(0);
+                    int newColPosition = Integer.parseInt(pieceSelected.getName().charAt(1) + "") + 1;
+                    String newPosition = newRowPosition + "" + newColPosition;
+
+                    int count = 0;
+                    for (int row = 0; row < 8; row++) {
+                        for (int col = 0; col < 5; col++) {
+                            if (squares[count].getName().equals(newPosition)) {
+                                if ((col + row) % 2 == 0) {//even numbers get white pieces
+                                    squares[count].setImage(boardImage2);
+                                } else {//odd numbers get black pieces
+                                    squares[count].setImage(boardImage1);
+                                }
+                            }
+                            count++;
+                        }
+                    }
+                    break;
+            }
+        } else if (pieceSelected.getType().contains("B")) { // Black pieces
+
+        }
+
+        pieceSelected.setLocation(e.getX() + pieceSelected.getxAdjustment(), e.getY() + pieceSelected.getyAdjustment());
+        pieceSelected.setSize(pieceSelected.getWidth(), pieceSelected.getHeight());
+
+        layeredPane.add(pieceSelected, JLayeredPane.DRAG_LAYER);
     }
 
-    //Move the chess piece around
+    //Move the chess pieceSelected around
     public void mouseDragged(MouseEvent me) {
-        if (piece == null) {
+        if (pieceSelected == null) {
             return;
         }
-        piece.setLocation(me.getX() + piece.getxAdjustment(), me.getY() + piece.getyAdjustment());
+        pieceSelected.setLocation(me.getX() + pieceSelected.getxAdjustment(), me.getY() + pieceSelected.getyAdjustment());
     }
 
-    //Drop the chess piece back onto the chess board
+    //Drop the chess pieceSelected back onto the chess board
     public void mouseReleased(MouseEvent e) {
-        if (piece == null) {
+        rebuildSquaresBackground();
+
+        if (pieceSelected == null) {
             return;
         }
 
-        piece.setVisible(false);
+        pieceSelected.setVisible(false);
         Component c = chessBoard.findComponentAt(e.getX(), e.getY());
+        Container parentContainer;
 
         if (c instanceof JLabel) {
-            Container parent = c.getParent();
-            parent.remove(0);
-            parent.add(piece);
+            parentContainer = c.getParent();
+            parentContainer.remove(0);
         } else {
-            Container parent = (Container) c;
-            parent.add(piece);
+            parentContainer = (Container) c;
         }
 
-        piece.setVisible(true);
+        pieceSelected.setName(c.getName());
+
+        System.out.println("========== Piece Selected ==========");
+        System.out.println("Piece Type : " + pieceSelected.getType() + "   |   Position : " + pieceSelected.getName());
+
+        parentContainer.add(pieceSelected);
+        pieceSelected.setVisible(true);
+    }
+
+    // Rebuild UI (Squares Background)
+    private void rebuildSquaresBackground() {
+        int count = 0;
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 5; col++) {
+                if ((col + row) % 2 == 0) {//even numbers get white pieces
+                    squares[count].setImage(boardImage1);
+                } else {//odd numbers get black pieces
+                    squares[count].setImage(boardImage2);
+                }
+                count++;
+            }
+        }
     }
 
     @Override

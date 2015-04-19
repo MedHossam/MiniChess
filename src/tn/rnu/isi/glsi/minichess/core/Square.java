@@ -26,6 +26,15 @@ public class Square extends JPanel {
         image = img;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+        this.repaint();
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         //draws image to background to scale of frame
