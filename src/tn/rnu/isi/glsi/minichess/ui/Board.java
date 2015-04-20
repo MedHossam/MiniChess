@@ -209,35 +209,71 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         pieceSelected.setxAdjustment(parentLocation.x - e.getX() - 1);
         pieceSelected.setyAdjustment(parentLocation.y - e.getY() + 3);
 
-        // TODO Show possible positions : this method will be in class blow
-        if (pieceSelected.getType().contains("W")) { // White pieces
-            switch (pieceSelected.getType()) {
-                case "WPa":
-                    char newRowPosition = pieceSelected.getName().charAt(0);
-                    int newColPosition = Integer.parseInt(pieceSelected.getName().charAt(1) + "") + 1;
-                    String newPosition = newRowPosition + "" + newColPosition;
-
-                    for (int row = 0; row < 8; row++) {
-                        for (int col = 0; col < 5; col++) {
-                            if (squares[row][col].getName().equals(newPosition)) {
-                                if ((col + row) % 2 == 0) {//even numbers get white pieces
-                                    squares[row][col].setImage(boardImage2);
-                                } else {//odd numbers get black pieces
-                                    squares[row][col].setImage(boardImage1);
-                                }
-                            }
-                        }
-                    }
-                    break;
-            }
-        } else if (pieceSelected.getType().contains("B")) { // Black pieces
-
-        }
+        showPossibleDestinations(pieceSelected);
 
         pieceSelected.setLocation(e.getX() + pieceSelected.getxAdjustment(), e.getY() + pieceSelected.getyAdjustment());
         pieceSelected.setSize(pieceSelected.getWidth(), pieceSelected.getHeight());
 
         layeredPane.add(pieceSelected, JLayeredPane.DRAG_LAYER);
+    }
+
+    // Show possible destinations on the chess board
+    public void showPossibleDestinations(Piece p) {
+        // TODO Show possible positions : this method will be in class blow
+        String rowIndexes = "ABCDE";
+        String colIndexes = "12345678";
+        int currentCol = rowIndexes.indexOf(p.getName().charAt(0));
+        int currentRow = colIndexes.indexOf(p.getName().charAt(1));
+        int newCol, newRow;
+
+        switch (p.getType()) {
+            // White pieces
+            case Piece.WPa:
+                newCol = currentCol;
+                newRow = 6 - currentRow;
+                if ((newCol + newRow) % 2 == 0) {//even numbers get white pieces
+                    squares[newRow][newCol].setImage(boardImage2);
+                } else {//odd numbers get black pieces
+                    squares[newRow][newCol].setImage(boardImage1);
+                }
+                break;
+
+            case Piece.WBi:
+                break;
+
+            case Piece.WKi:
+                break;
+
+            case Piece.WKn:
+                break;
+
+            case Piece.WQu:
+                break;
+
+            case Piece.WTo:
+                break;
+
+            // Black Pieces
+            case Piece.BPa:
+                break;
+
+            case Piece.BBi:
+                break;
+
+            case Piece.BKi:
+                break;
+
+            case Piece.BKn:
+                break;
+
+            case Piece.BQu:
+                break;
+
+            case Piece.BTo:
+                break;
+            default:
+                return;
+        }
     }
 
     //Move the chess pieceSelected around
@@ -278,15 +314,13 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
     // Rebuild UI (Squares Background)
     private void rebuildSquaresBackground() {
-        int count = 0;
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 5; col++) {
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
                 if ((col + row) % 2 == 0) {//even numbers get white pieces
                     squares[row][col].setImage(boardImage1);
                 } else {//odd numbers get black pieces
                     squares[row][col].setImage(boardImage2);
                 }
-                count++;
             }
         }
     }
@@ -297,15 +331,19 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        Component c = chessBoard.findComponentAt(e.getX(), e.getY());
+        if (c instanceof Piece) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        } else {
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 }
