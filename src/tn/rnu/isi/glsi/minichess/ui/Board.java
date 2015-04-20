@@ -51,8 +51,8 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
     Piece pieceSelected;
 
     //initialze arrays to hold squares and images of the board
-    private Piece[] pieces = new Piece[40];
-    private Square[] squares = new Square[40];
+    private Piece[][] pieces = new Piece[8][5];
+    private Square[][] squares = new Square[8][5];
 
     public Board(Image boardImage1, Image boardImage2) {
         this.boardImage1 = boardImage1;
@@ -140,58 +140,62 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
     private void addPanelsAndLabels() {
         //call methd to create squares with backgound images and appropriate names
         addPanelsAndImages();
+        int i = 0;
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                pieces[row][col] = new Piece(Piece.INITIALPOSITIONS[i], Piece.POSITIONS[i]);
 
-        for (int i = 0; i < squares.length; i++) {
-            pieces[i] = new Piece(Piece.INITIALPOSITIONS[i], Piece.POSITIONS[i]);
+                //used to know the postion of the label on the board
+                pieces[row][col].setName(squares[row][col].getName());
 
-            //used to know the postion of the label on the board
-            pieces[i].setName(squares[i].getName());
+                squares[row][col].add(pieces[row][col]);
 
-            squares[i].add(pieces[i]);
-
-            //adds squares created in addPanelsAndImages()
-            chessBoard.add(squares[i]);
+                //adds squares created in addPanelsAndImages()
+                chessBoard.add(squares[row][col]);
+                i++;
+            }
         }
 
         // Add pieces to initial positions
-        for (int i = 0; i < squares.length; i++) {
-            addPiece(pieces[i]);
+        for (Piece[] piecesCols : pieces) {
+            for (Piece p : piecesCols) {
+                addPiece(p);
+            }
         }
     }
 
     //method sets image of a label at a certain position in the board according to the block name i.e D4
     public void addPiece(Piece piece) {
-        for (Piece p : pieces) {
-            if (p.getName().equalsIgnoreCase(piece.getPosition())) {
-                p.setIcon(piece.getImgIcon());
+        for (Piece[] piecesCols : pieces) {
+            for (Piece p : piecesCols) {
+                if (p.getName().equalsIgnoreCase(piece.getPosition())) {
+                    p.setIcon(piece.getImgIcon());
+                }
             }
         }
     }
 
     //this method will create squares with backround images of chess board and set its name according to 1-8 for rows and A-H for coloumns
     private void addPanelsAndImages() {
-        int count = 0;
+        //int count = 0;
         String[] label = {"A", "B", "C", "D", "E"};
         int[] num = {8, 7, 6, 5, 4, 3, 2, 1};
 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 5; col++) {
                 if ((col + row) % 2 == 0) {//even numbers get white pieces
-                    squares[count] = new Square(boardImage1);
+                    squares[row][col] = new Square(boardImage1);
                 } else {//odd numbers get black pieces
-                    squares[count] = new Square(boardImage2);
+                    squares[row][col] = new Square(boardImage2);
                 }
-                squares[count].setName(label[col] + num[row]);
-                //squares[count].setLayout(new BorderLayout());
-                chessBoard.add(squares[count]);
-                count++;
+                squares[row][col].setName(label[col] + num[row]);
+                chessBoard.add(squares[row][col]);
+                //count++;
             }
         }
     }
 
     public void mousePressed(MouseEvent e) {
-        //setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
         pieceSelected = null;
         Component c = chessBoard.findComponentAt(e.getX(), e.getY());
 
@@ -213,17 +217,15 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
                     int newColPosition = Integer.parseInt(pieceSelected.getName().charAt(1) + "") + 1;
                     String newPosition = newRowPosition + "" + newColPosition;
 
-                    int count = 0;
                     for (int row = 0; row < 8; row++) {
                         for (int col = 0; col < 5; col++) {
-                            if (squares[count].getName().equals(newPosition)) {
+                            if (squares[row][col].getName().equals(newPosition)) {
                                 if ((col + row) % 2 == 0) {//even numbers get white pieces
-                                    squares[count].setImage(boardImage2);
+                                    squares[row][col].setImage(boardImage2);
                                 } else {//odd numbers get black pieces
-                                    squares[count].setImage(boardImage1);
+                                    squares[row][col].setImage(boardImage1);
                                 }
                             }
-                            count++;
                         }
                     }
                     break;
@@ -280,9 +282,9 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 5; col++) {
                 if ((col + row) % 2 == 0) {//even numbers get white pieces
-                    squares[count].setImage(boardImage1);
+                    squares[row][col].setImage(boardImage1);
                 } else {//odd numbers get black pieces
-                    squares[count].setImage(boardImage2);
+                    squares[row][col].setImage(boardImage2);
                 }
                 count++;
             }
@@ -299,9 +301,11 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 }
