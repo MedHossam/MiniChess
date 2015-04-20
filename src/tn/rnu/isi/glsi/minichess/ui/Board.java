@@ -291,9 +291,30 @@ public class Board extends JFrame implements MouseListener, MouseMotionListener 
         if (pieceSelected == null) {
             return;
         }
-
+        int X=0, Y=0;
+        
+        if (e.getX() > 310) {
+            X = e.getX() - e.getX() + 310;
+        } else if (e.getX() < 5) {
+            X = e.getX()-e.getX()+5;
+        } else {
+            X = e.getX();
+        }
+        
+        if (e.getY() > 500) {
+            Y = e.getY() - e.getY() + 500;
+        System.out.println(Y);
+        } else if (e.getY() < 5) {
+            Y = e.getY()-e.getY()+5;
+        } else {
+            Y = e.getY();
+        }
+        
+        Component c = chessBoard.findComponentAt(X, Y);
+        
         pieceSelected.setVisible(false);
-        Component c = chessBoard.findComponentAt(e.getX(), e.getY());
+
+        System.out.println("=== Released ===\nX = " + e.getX() + "\tY = " + e.getY());
         Container parentContainer;
 
         if (c instanceof JLabel) {
