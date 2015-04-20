@@ -17,7 +17,7 @@ import tn.rnu.isi.glsi.minichess.ui.MainWindow;
 public class Piece extends JLabel {
 
     // Empty Piece
-    public static final String EPi = "";
+    public static final String EPi = "EPi";
 
     // White King
     public static final String WKi = "WKi";
@@ -69,6 +69,10 @@ public class Piece extends JLabel {
 
     private int xAdjustment;
     private int yAdjustment;
+    
+    private int currentX;
+    private int currentY;
+    
     private String position;
     private String type;
     private ImageIcon imgIcon;
@@ -123,5 +127,21 @@ public class Piece extends JLabel {
 
     public void setImgIcon(ImageIcon imgIcon) {
         this.imgIcon = imgIcon;
+    }
+
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public void setCurrentX(int currentX) {
+        this.currentX = currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public void setCurrentY(int currentY) {
+        this.currentY = currentY;
     }
 }
